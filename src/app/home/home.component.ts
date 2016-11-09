@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import { Employee } from '../models/employee.model';
-
+import { FormPoster } from '../services/form-poster.service';
+import { NgForm } from '@angular/forms'
 @Component({
   selector: 'home',
   styleUrls: ['./home.component.css'],
@@ -17,4 +18,19 @@ export class HomeComponent {
         this.hasPrimaryLanguageError = false;
       }
     } 
+    constructor(private formPoster: FormPoster) {
+
+    }
+    submitForm(form: NgForm){
+      //validate form
+      this.validatePrimaryLanguage(this.model.primaryLanguage);
+      if(this.hasPrimaryLanguageError) {
+        return;
+      }
+      this.formPoster.postEmployeeForm(this.model)
+        .subscribe(
+          data => console.log('success:', data),
+          err => console.log('success:', err)
+        );
+    }
 }
